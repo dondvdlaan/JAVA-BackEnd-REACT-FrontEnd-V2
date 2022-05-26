@@ -1,5 +1,7 @@
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {mariaDBApi, useMariaDBApi} from "../shared/MariaDBApi";
+import { StoreContext } from "../Store";
 import { Product } from "../types/Product";
 import { LoadingSpinner } from "./shared/LoadingSpinner";
 
@@ -9,11 +11,14 @@ const ProductTable = () => {
 //****************** Constants ******************
 // Hooks
 const navigate = useNavigate();
+const {store, dispatch} = useContext(StoreContext);
 const rows = useMariaDBApi('get','allProducts');  //Now calling MariaDBApi
 
-const VIEW_SYMBOL = "V";
-const EDIT_SYMBOL = "E";
-const DELETE_SYMBOL = "D";
+const VIEW_SYMBOL = "View";
+const EDIT_SYMBOL = "Edit";
+const DELETE_SYMBOL = "Del";
+const ADD_TO_SELECTION_SYMBOL = "Add";
+
 
 //****************** Event handlers ******************
 const onProductDetail = (row: Product) => {
@@ -25,13 +30,20 @@ const onProductEdit = (row: Product) => {
 const onProductAdd = () => {
   navigate(`/add`)}
 
+const onProductSelection = () => {
+  navigate(`/select`)}
+
 const onProductDelete = (row: Product) => {
   console.log('ProductID', row.id);
   
   mariaDBApi('GET',`delete/${row.id}`,() => navigate(`/`))
-  
 }
-  
+const onAddToSelection = (row: Product) => {
+  dispatch({
+    type: "addToSelection",
+    product: row
+  }); }
+
 // Wait till rows are there
 if (!rows) {
   return <LoadingSpinner />;
@@ -50,8 +62,10 @@ return (
       <th scope="col">Item</th>
       <th scope="col">Description</th>
       <th scope="col">Details</th>
-      <th scope="col">Edit</th>
+      <th scope="col">Update</th>
       <th scope="col">Delete</th>
+      <th scope="col">Selection</th>
+
     </tr>
   </thead>
   <tbody>
@@ -69,11 +83,16 @@ return (
       <td 
       onClick={() => onProductDelete(row)}
       className="table-warning">{DELETE_SYMBOL}</td>
+      <td 
+      onClick={() => onAddToSelection(row)}
+      className="table-info">{ADD_TO_SELECTION_SYMBOL}</td>
     </tr>
     )} 
   </tbody>
 </table>
 <button onClick={onProductAdd} type="button" className="btn btn-primary">Add Product</button>
+<button onClick={onProductSelection} type="button" className="btn btn-secondary">Product Selection</button>
+
 </>
     ); // END return
 }

@@ -6,17 +6,17 @@ const ProductSelectionView = () =>{
 
   // Constants
 
-const VIEW = "Selection of Products";
+const VIEW = "Product Selection";
 
     return (
         <section className='p-3'>
           <NavBar view={VIEW}/>
           <Link to={'/dash'} style={{ textDecoration: 'none' }}>
-          <ProductSelection />
+            <ProductSelection />
           </Link>
         </section>
             
           );  // END Return
 }
 
-export default ProductDetailView;
+export default ProductSelectionView;

@@ -6,6 +6,8 @@ Communication between the front-end and the back-end is by way of JSON.
 
 Java Spring Boot files are saved under the java directory, REACT can be found under the ui directory.
 
+In REACT Context and useReducer are used for a selection page of products.
+
 Make sure that the names of the attributes (eg productDetails, id, etc) are the same on both sides for proper data
 exchange.
 
